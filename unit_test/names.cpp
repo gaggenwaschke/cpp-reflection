@@ -1,18 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
-#include <catch2/benchmark/catch_benchmark.hpp>
 #include <reflection/names.hpp>
 
-namespace mock
-{
-    struct Clown
-    {
-    };
-
-    template <typename T>
-    struct Tent
-    {
-    };
-} // namespace mock
+#include "mock.hpp"
 
 TEST_CASE("Names of integrals get resolved")
 {

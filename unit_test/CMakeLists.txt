@@ -9,7 +9,8 @@ fetchContent_Declare(
 fetchContent_MakeAvailable(Catch2)
 
 add_executable(cpp-reflection_unit_test
-    names.cpp)
+    names.cpp
+    member_objects.cpp)
 target_link_libraries(cpp-reflection_unit_test PRIVATE
     cpp-reflection::cpp-reflection
     Catch2::Catch2WithMain)
