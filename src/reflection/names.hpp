@@ -27,13 +27,13 @@ namespace reflection
                 value = raw_string;
                 return value;
             case -1:
-                throw std::runtime_error("A memory allocation failiure occurred.");
+                throw std::runtime_error("A memory allocation failure occurred.");
             case -2:
                 throw std::invalid_argument("mangled_name is not a valid name under the C++ ABI mangling rules.");
             case -3:
                 throw std::invalid_argument("One of the arguments is invalid.");
             default:
-                throw std::runtime_error("abi::__cxa_demangle returned unxepcted code");
+                throw std::runtime_error("abi::__cxa_demangle returned unexpected code");
             }
         }
 
