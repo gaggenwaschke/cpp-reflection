@@ -4,7 +4,8 @@
 #include <ranges>
 #include <concepts>
 
-#include "reflection/structured_binding/member_reference.hpp"
+#include "reflection/structured_binding/member_object_reference.hpp"
+#include "reflection/manual/member_object_reference.hpp"
 
 namespace reflection
 {
@@ -17,9 +18,9 @@ namespace reflection
                                           };
 
     template <typename member_object_reference_type, typename reflected_type>
-    concept named_member_object_reference_for = member_object_reference_for<member_object_reference_type, reflected_type> && requires {
+    concept named_member_object_reference_for = member_object_reference_for<member_object_reference_type, reflected_type> && requires(const member_object_reference_type &reference) {
                                                                                                                                  {
-                                                                                                                                     member_object_reference_type::name
+                                                                                                                                     reference.name()
                                                                                                                                      } -> string_like;
                                                                                                                              };
 
@@ -31,17 +32,14 @@ namespace reflection
     template <typename reflected_type>
     struct member_object_reference_list
     {
-        constexpr auto operator()() const
+        using indices = std::make_index_sequence<structured_binding::get_reference_tuple_size<reflected_type>()>;
+
+        constexpr static auto member_reference_maker = []<std::size_t... indices>(std::index_sequence<indices...>)
         {
-            using indices = std::make_index_sequence<structured_binding::get_reference_tuple_size<reflected_type>()>;
+            return std::make_tuple(structured_binding::member_object_reference_by_tuple_index<reflected_type, indices>{}...);
+        };
 
-            constexpr auto member_reference_maker = []<std::size_t... indices>(std::index_sequence<indices...>)
-            {
-                return std::make_tuple(structured_binding::member_reference_by_tuple_index<reflected_type, indices>{}...);
-            };
-
-            return member_reference_maker(indices{});
-        }
+        constexpr static auto value = member_reference_maker(indices{});
     };
 
     /**
@@ -50,9 +48,22 @@ namespace reflection
     template <typename reflected_type>
     constexpr auto get_member_object_references()
     {
-        constexpr auto list = member_object_reference_list<reflected_type>{}();
+        constexpr auto list = member_object_reference_list<reflected_type>::value;
         std::apply([]<typename... member_object_reference_type>(const member_object_reference_type &...)
                    { static_assert((member_object_reference_for<member_object_reference_type, reflected_type> && ...), "Invalid member object reference!"); },
+                   list);
+        return list;
+    }
+
+    /**
+     * @brief Get the tuple of member object references for the reflected type.
+     */
+    template <typename reflected_type>
+    constexpr auto get_named_member_object_references()
+    {
+        constexpr auto list = member_object_reference_list<reflected_type>::value;
+        std::apply([]<typename... member_object_reference_type>(const member_object_reference_type &...)
+                   { static_assert((named_member_object_reference_for<member_object_reference_type, reflected_type> && ...), "Invalid member object reference!"); },
                    list);
         return list;
     }

@@ -1,27 +1,23 @@
 #include <catch2/catch_test_macros.hpp>
 #include <reflection/member_object_references.hpp>
-#include <functional>
 
 #include "mock.hpp"
 
-TEST_CASE("Getting member object references by structured binding")
+namespace reflection
+{
+    template <>
+    struct member_object_reference_list<mock::Clown>
+    {
+        constexpr static auto value = std::make_tuple(&mock::Clown::first, &mock::Clown::second);
+    };
+} // namespace reflection
+
+TEST_CASE("Manual member object references  without name")
 {
     constexpr auto member_object_references = reflection::get_member_object_references<mock::Clown>();
     CHECK(std::tuple_size_v<decltype(member_object_references)> == 2);
     auto first_reference = std::get<0>(member_object_references);
     auto second_reference = std::get<1>(member_object_references);
-
-    using first_type = decltype(first_reference);
-    using first_class_type = first_type::class_type;
-    using first_member_type = first_type::member_type;
-    using second_type = decltype(second_reference);
-    using second_class_type = second_type::class_type;
-    using second_member_type = second_type::member_type;
-
-    CHECK(std::same_as<mock::Clown, first_class_type>);
-    CHECK(std::same_as<int, first_member_type>);
-    CHECK(std::same_as<mock::Clown, second_class_type>);
-    CHECK(std::same_as<char, second_member_type>);
 
     mock::Clown clown{1, 2};
     CHECK(std::invoke(first_reference, clown) == 1);

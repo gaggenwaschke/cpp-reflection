@@ -8,7 +8,7 @@
 namespace reflection::structured_binding
 {
     template <typename type_to_get_member_from, std::size_t index>
-    struct member_reference_by_tuple_index
+    struct member_object_reference_by_tuple_index
     {
         using class_type = std::remove_const_t<type_to_get_member_from>;
         using member_type = std::remove_cvref_t<decltype(std::get<index>(structured_binding::get_reference_tuple_from_object<class_type>(std::declval<class_type &>())))>;

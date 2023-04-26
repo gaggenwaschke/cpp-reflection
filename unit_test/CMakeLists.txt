@@ -10,7 +10,10 @@ fetchContent_MakeAvailable(Catch2)
 
 add_executable(cpp-reflection_unit_test
     names.cpp
-    member_objects.cpp)
+    member_objects/auto_structured_binding.cpp
+    member_objects/manual_with_name.cpp
+    member_objects/manual_without_name.cpp)
+target_include_directories(cpp-reflection_unit_test PRIVATE ./)
 target_link_libraries(cpp-reflection_unit_test PRIVATE
     cpp-reflection::cpp-reflection
     Catch2::Catch2WithMain)
