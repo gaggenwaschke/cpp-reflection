@@ -9,8 +9,8 @@ namespace reflection
     struct member_object_reference_list<mock::Clown>
     {
         constexpr static auto value = std::make_tuple(
-            reflection::manual::member_object_reference{&mock::Clown::first, "first"},
-            reflection::manual::member_object_reference{&mock::Clown::second, "second"});
+            manual::member_object_reference{&mock::Clown::first, "first"},
+            manual::member_object_reference{&mock::Clown::second, "second"});
     };
 } // namespace reflection
 
