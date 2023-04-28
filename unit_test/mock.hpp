@@ -8,6 +8,13 @@ namespace mock
         char second;
     };
 
+    struct Car
+    {
+        int speed;
+        short fuel;
+        char passengers;
+    };
+
     template <typename T>
     struct Tent
     {
