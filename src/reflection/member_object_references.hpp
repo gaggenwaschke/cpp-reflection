@@ -32,7 +32,7 @@ namespace reflection
     template <typename reflected_type>
     struct member_object_reference_list
     {
-        using indices = std::make_index_sequence<structured_binding::get_reference_tuple_size<reflected_type>()>;
+        using indices = std::make_index_sequence<structured_binding::struct_bind_num_v<reflected_type>>;
 
         constexpr static auto member_reference_maker = []<std::size_t... indices>(std::index_sequence<indices...>)
         {
