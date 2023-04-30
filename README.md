@@ -8,6 +8,19 @@
 This library aims to allow for easy and automatic cpp reflection where possible. Since the C++ standard does not yet support
 reflection, this library utilizes structured binding and abi calls to resolve structure names.
 
+# Installation
+
+To install this library on your computer, download, build and the install:
+```bash
+git clone https://github.com/gaggenwaschke/cpp-reflection.git
+cd cpp-reflection
+cmake -B build -D CMAKE_BUILD_TYPE=Release .
+cmake --build build
+sudo cmake install build
+```
+
+# Usage
+
 ## type names
 
 You can get the name of any type by:
